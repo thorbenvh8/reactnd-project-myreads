@@ -2,7 +2,20 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 
+import BooksGrid from './BooksGrid'
+
+const style = {
+  noResults: {
+    textAlign: "center"
+  }
+}
+
 class BooksSearch extends React.Component {
+  componentDidMount(){
+     this.searchInput.focus();
+     this.searchInput.select();
+  }
+
   render() {
     return (
       <div className="search-books">
@@ -17,12 +30,12 @@ class BooksSearch extends React.Component {
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input type="text" placeholder="Search by title or author"/>
-
+            <input type="text" ref={(input) => { this.searchInput = input }} value={this.props.query} onChange={(event) => this.props.onSearch(event.target.value)} placeholder="Search by title or author"/>
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          { this.props.noResults && <div style={style.noResults}>No results found</div> }
+          { !this.props.noResults && <BooksGrid books={this.props.books} onShelfChange={this.props.onShelfChange}/> }
         </div>
       </div>
     )
